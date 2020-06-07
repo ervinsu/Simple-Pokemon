@@ -1,5 +1,9 @@
 package com.ervin.pokemonervin.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Type(
     val typeName: String,
     val color: String = when (typeName) {
@@ -23,4 +27,4 @@ data class Type(
         "Fairy" -> "#D685AD"
         else -> "#"
     }
-)
+) : Parcelable

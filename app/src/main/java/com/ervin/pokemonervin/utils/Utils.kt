@@ -2,6 +2,12 @@ package com.ervin.pokemonervin.utils
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.net.Uri
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.ervin.pokemonervin.model.BaseStatus
 import com.ervin.pokemonervin.model.Pokemon
 import com.ervin.pokemonervin.model.Type
@@ -68,3 +74,30 @@ fun convertIdPokemonToImageAssets(pokemonId: Int)=
             "file:///android_asset/images/$pokemonId.png"
         }
     }
+
+fun ImageView.loadImagesFromFile(context: Context, filePath: String) {
+    Glide.with(context)
+        .load(Uri.parse(filePath))
+        .into(this)
+}
+
+fun ImageView.loadCircleImagesFromFile(context: Context, filePath: String) {
+    Glide.with(context)
+        .load(Uri.parse(filePath))
+        .apply(RequestOptions().circleCrop())
+        .into(this)
+}
+
+fun getGradientColorPokemon(listTypes: List<Type>): GradientDrawable {
+    val arrayColorTypes = IntArray(2)
+    for (i in listTypes.indices) {
+        arrayColorTypes[i] = Color.parseColor(listTypes[i].color)
+        if (listTypes.size == 1) {
+            arrayColorTypes[1] = Color.parseColor(listTypes[0].color)
+        }
+    }
+
+    val gd = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, arrayColorTypes)
+    gd.cornerRadius = 0f
+    return gd
+}

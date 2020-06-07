@@ -7,7 +7,9 @@
     android:layout_marginTop="8dp"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
-
+    android:id="@+id/cardViewPokemonItem"
+    android:stateListAnimator="@xml/animation_clicked"
+    android:transitionName="pokeContainer"
     app:cardElevation="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,10 +17,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/cv_pokemon_container">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_pokemon_image"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:transitionName="pokePicture"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

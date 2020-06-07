@@ -1,19 +1,22 @@
 package com.ervin.pokemonervin.ui.home
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.net.Uri
-import android.util.Log
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.ervin.pokemonervin.R
 import com.ervin.pokemonervin.model.Pokemon
+import com.ervin.pokemonervin.ui.detail.DetailActivity
+import com.ervin.pokemonervin.ui.detail.DetailActivity.Companion.INTENT_POKEMON
 import com.ervin.pokemonervin.utils.convertIdPokemonToImageAssets
+import com.ervin.pokemonervin.utils.getGradientColorPokemon
+import com.ervin.pokemonervin.utils.loadImagesFromFile
 import kotlinx.android.synthetic.main.pokemon_card_view.view.*
-import kotlin.math.log
 
 class HomeAdapter(private val listPokemon: List<Pokemon>) :
     RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
@@ -22,21 +25,36 @@ class HomeAdapter(private val listPokemon: List<Pokemon>) :
         fun bind(pokemon: Pokemon) {
             itemView.tv_pokemon_name.text = pokemon.pokemonName
 
-            val arrayColorTypes = IntArray(2)
-            for (i in pokemon.pokemonTypes.indices) {
-                arrayColorTypes[i] = Color.parseColor(pokemon.pokemonTypes[i].color)
-                if (pokemon.pokemonTypes.size == 1){
-                    arrayColorTypes[1] = Color.parseColor(pokemon.pokemonTypes[0].color)
-                }
-            }
+            itemView.cv_pokemon_container.background = getGradientColorPokemon(pokemon.pokemonTypes)
 
-            val gd = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, arrayColorTypes)
-            gd.cornerRadius = 0f
-            itemView.cv_pokemon_container.background = gd
-            val a = convertIdPokemonToImageAssets(pokemon.pokemonID)
-            Glide.with(itemView.context)
-                .load(Uri.parse(a))
-                .into(itemView.iv_pokemon_image)
+            itemView.iv_pokemon_image.loadImagesFromFile(
+                itemView.context,
+                convertIdPokemonToImageAssets(pokemon.pokemonID)
+            )
+
+            itemView.cardViewPokemonItem.setOnClickListener {
+                val intent = Intent(itemView.context, DetailActivity::class.java)
+                val pPokePicture =
+                    Pair.create<View, String>(itemView.iv_pokemon_image, "pokePicture")
+                val pPokeContainer =
+                    Pair.create<View, String>(itemView.cardViewPokemonItem, "pokeContainer")
+                val pBgDetail = Pair.create<View, String>(
+                    (itemView.context as Activity).findViewById(R.id.bg_detail),
+                    "bgDetail"
+                )
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    itemView.context as Activity,
+                    pPokeContainer,
+                    pPokePicture,
+                    pBgDetail
+                )
+                intent.putExtra(INTENT_POKEMON, pokemon)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    itemView.context.startActivity(intent, options.toBundle())
+                else
+                    itemView.context.startActivity(intent)
+            }
         }
     }
 

@@ -1,7 +1,10 @@
 package com.ervin.pokemonervin.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class BaseStatus (
     @SerializedName("HP")
     val hp: Int,
@@ -15,4 +18,4 @@ data class BaseStatus (
     val spDefense: Int,
     @SerializedName("Speed")
     val speed: Int
-)
+) : Parcelable
