@@ -65,13 +65,13 @@ fun Activity.loadPokemon(): List<Pokemon>? {
 fun convertIdPokemonToImageAssets(pokemonId: Int)=
     when {
         pokemonId<10 -> {
-            "file:///android_asset/images/00$pokemonId.png"
+            "file:///android_asset/sprites/00${pokemonId}MS.png"
         }
         pokemonId in 10..99 -> {
-            "file:///android_asset/images/0$pokemonId.png"
+            "file:///android_asset/sprites/0${pokemonId}MS.png"
         }
         else -> {
-            "file:///android_asset/images/$pokemonId.png"
+            "file:///android_asset/sprites/${pokemonId}MS.png"
         }
     }
 
